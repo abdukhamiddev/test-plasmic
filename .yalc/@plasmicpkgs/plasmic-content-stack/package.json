@@ -1,0 +1,41 @@
+{
+  "name": "@plasmicpkgs/plasmic-content-stack",
+  "version": "0.0.69",
+  "description": "Plasmic ContentStack components.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/plasmic-content-stack.esm.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "size-limit": [
+    {
+      "path": "dist/plasmic-content-stack.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/plasmic-content-stack.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "contentstack": "^3.15.1",
+    "dlv": "^1.1.3"
+  },
+  "yalcSig": "d8a59ee62bdc03145049ffc92b2156e0"
+}

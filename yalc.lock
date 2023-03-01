@@ -1,0 +1,25 @@
+{
+  "version": "v1",
+  "packages": {
+    "@plasmicpkgs/plasmic-content-stack": {
+      "signature": "d8a59ee62bdc03145049ffc92b2156e0",
+      "file": true
+    },
+    "@plasmicpkgs/plasmic-contentful": {
+      "signature": "9646ae1ad3929273d77f3bb0d7aa6063",
+      "file": true
+    },
+    "@plasmicpkgs/plasmic-graphcms": {
+      "signature": "720c0fdbd87640fc33ed128ca7698443",
+      "file": true
+    },
+    "@plasmicpkgs/plasmic-wordpress-graphql": {
+      "signature": "9ee573e72442dcdf1c39a07676625b24",
+      "file": true
+    },
+    "@plasmicpkgs/keen-slider": {
+      "signature": "5c3411a56d6ecf554327939e2378c9a6",
+      "file": true
+    }
+  }
+}

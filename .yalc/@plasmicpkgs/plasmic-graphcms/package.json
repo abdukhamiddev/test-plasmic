@@ -1,0 +1,41 @@
+{
+  "name": "@plasmicpkgs/plasmic-graphcms",
+  "version": "0.0.77",
+  "description": "Plasmic GraphCMS components.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/plasmic-graphcms.esm.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "size-limit": [
+    {
+      "path": "dist/plasmic-graphcms.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/plasmic-graphcms.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "dependencies": {
+    "@plasmicapp/host": "1.0.107",
+    "@plasmicapp/query": "0.1.61",
+    "dlv": "^1.1.3"
+  },
+  "yalcSig": "720c0fdbd87640fc33ed128ca7698443"
+}
