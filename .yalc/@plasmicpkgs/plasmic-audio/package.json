@@ -1,0 +1,37 @@
+{
+  "name": "@plasmicpkgs/plasmic-audio",
+  "version": "0.0.2",
+  "description": "Plasmic audio player",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/plasmic-audio.esm.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "size-limit": [
+    {
+      "path": "dist/plasmic-audio.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/plasmic-audio.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "dependencies": {},
+  "yalcSig": "bd7b330552ea3ed9fc2c7d09eb201d6c"
+}
