@@ -812,7 +812,7 @@ try {
 
 var searchParameters = [{
   value: "[match]",
-  label: 'Full text search'
+  label: 'Full text search  '
 }, {
   value: "[in]",
   label: 'Includes'
@@ -827,10 +827,10 @@ var searchParameters = [{
   label: 'Less than or equal'
 }, {
   value: "[gt]",
-  label: 'Greater than'
+  label: 'Greater Than'
 }, {
   value: "[gte]",
-  label: 'Greater than or equal'
+  label: 'Greater than or equal '
 }];
 var uniq = function uniq(xs) {
   return Array.from(new Set(xs));
@@ -1073,7 +1073,7 @@ function ContentfulFetcher(_ref2) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            queryPath = "/spaces/" + creds.space + "/environments/" + creds.environment + "/entries?access_token=" + creds.accessToken + "&content_type=" + contentType + "&fields." + filterField + searchParameter + "=" + filterValue + "}";
+            queryPath = "/spaces/" + creds.space + "/environments/" + creds.environment + "/entries?access_token=" + creds.accessToken + "&content_type=" + contentType + "&fields." + filterField + searchParameter + "=" + filterValue;
             _context3.next = 3;
             return fetch("" + baseUrl + queryPath);
 
