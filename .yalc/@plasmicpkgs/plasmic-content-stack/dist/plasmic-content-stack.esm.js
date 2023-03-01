@@ -973,7 +973,7 @@ var ContentStackFetcherMeta = {
       displayName: "Filter value",
       description: "Value to filter by, should be of filter field type",
       hidden: function hidden(props, ctx) {
-        return !props.filterField;
+        return !props.queryOperator;
       }
     },
     limit: {
@@ -1099,6 +1099,8 @@ function ContentStackFetcher(_ref2) {
           case 2:
             if (!queryOperator) {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\": \"" + filterValue + "\"}";
+            } else if (queryOperator === '$lt' || '$lte' || '$gt' || '$gte') {
+              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :" + parseInt(filterValue) + "}}";
             } else {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :\"" + filterValue + "\"}}";
             }
