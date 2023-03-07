@@ -24,6 +24,7 @@ interface ContentStackFetcherProps {
             uid: string;
         }[];
         filterFields?: string[];
+        queryOptions?: [];
     }) => void;
 }
 export declare const ContentStackFetcherMeta: ComponentMeta<ContentStackFetcherProps>;

@@ -957,12 +957,9 @@ var ContentStackFetcherMeta = {
       displayName: "Query Operator",
       description: "Query Operator filter by",
       options: function options(props, ctx) {
-        return queryOperators.map(function (item) {
-          return {
-            label: item == null ? void 0 : item.label,
-            value: item == null ? void 0 : item.value
-          };
-        });
+        var _ctx$queryOptions;
+
+        return (_ctx$queryOptions = ctx == null ? void 0 : ctx.queryOptions) != null ? _ctx$queryOptions : [];
       },
       hidden: function hidden(props, ctx) {
         return !props.filterField;
@@ -1099,7 +1096,7 @@ function ContentStackFetcher(_ref2) {
           case 2:
             if (!queryOperator) {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\": \"" + filterValue + "\"}";
-            } else if (queryOperator === '$lt' || '$lte' || '$gt' || '$gte') {
+            } else if (queryOperator === "$lt" || "$lte" || "$gt" || "$gte") {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :" + parseInt(filterValue) + "}}";
             } else {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :\"" + filterValue + "\"}}";
@@ -1158,7 +1155,35 @@ function ContentStackFetcher(_ref2) {
     });
     return fields;
   });
+  var operators;
+  var matchedFields = Object.values(entriesData).flatMap(function (model) {
+    return Array.isArray(model) ? model : [model];
+  }).map(function (item) {
+    var fields = Object.entries(item).find(function (el) {
+      return el[0] === filterField;
+    });
+    return fields;
+  });
+  Object.values(matchedFields).map(function (model) {
+    return Array.isArray(model) ? model : [model];
+  }).map(function (item) {
+    if (typeof item[1] === "number" && typeof item[1] !== "object") {
+      operators = queryOperators;
+    } else if (typeof item[1] !== "number" && typeof item[1] !== "object") {
+      operators = [{
+        value: "",
+        label: "Is"
+      }, {
+        value: "$ne",
+        label: "Is not"
+      }, {
+        value: "$regex",
+        label: "Matches regex"
+      }];
+    }
+  });
   setControlContextData == null ? void 0 : setControlContextData({
+    queryOptions: operators,
     types: types,
     filterFields: fieldsForFilter[0]
   });

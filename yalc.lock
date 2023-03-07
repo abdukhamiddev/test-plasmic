@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@plasmicpkgs/plasmic-content-stack": {
-      "signature": "9718ddc00bc6df8e462f2f80cdd79058",
+      "signature": "9b776befe5e8229f1e5d30686aaf7109",
       "file": true
     },
     "@plasmicpkgs/plasmic-contentful": {
