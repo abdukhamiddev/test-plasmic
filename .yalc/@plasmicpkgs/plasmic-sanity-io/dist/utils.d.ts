@@ -1,8 +1,4 @@
-export declare const comparisonParameters: {
-    value: string;
-    label: string;
-}[];
-export declare const logicalParameters: {
+export declare const searchParameters: {
     value: string;
     label: string;
 }[];

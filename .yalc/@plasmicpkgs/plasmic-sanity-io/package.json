@@ -27,8 +27,6 @@
     "analyze": "size-limit --why"
   },
   "dependencies": {
-    "@plasmicapp/host": "^1.0.91",
-    "@plasmicapp/query": "^0.1.57",
     "@sanity/client": "^3.3.0",
     "@sanity/image-url": "^1.0.1",
     "change-case": "^4.1.2",
@@ -38,5 +36,5 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "yalcSig": "b2f00129611a9726213eb6090ab3592c"
+  "yalcSig": "6092186abba60e1d927e824a6d65da65"
 }

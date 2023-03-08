@@ -24,6 +24,7 @@ interface SanityFetcherProps {
     setControlContextData?: (data: {
         docTypes?: string[];
         sanityFields?: string[];
+        queryOptions?: [];
     }) => void;
 }
 export declare const sanityFetcherMeta: ComponentMeta<SanityFetcherProps>;
