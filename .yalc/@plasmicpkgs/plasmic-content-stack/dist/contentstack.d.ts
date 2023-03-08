@@ -15,7 +15,7 @@ interface ContentStackFetcherProps {
     noLayout?: boolean;
     filterField?: string;
     queryOperator?: string;
-    filterValue?: string;
+    filterValue?: string | number;
     limit?: number;
     noAutoRepeat?: boolean;
     setControlContextData?: (data: {

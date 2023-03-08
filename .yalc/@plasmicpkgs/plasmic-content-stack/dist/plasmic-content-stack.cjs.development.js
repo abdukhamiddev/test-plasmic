@@ -975,10 +975,7 @@ var ContentStackFetcherMeta = {
     filterValue: {
       type: "string",
       displayName: "Filter value",
-      description: "Value to filter by, should be of filter field type",
-      hidden: function hidden(props, ctx) {
-        return !props.queryOperator;
-      }
+      description: "Value to filter by, should be of filter field type"
     },
     limit: {
       type: "number",
@@ -1102,11 +1099,13 @@ function ContentStackFetcher(_ref2) {
 
           case 2:
             if (!queryOperator) {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\": \"" + filterValue + "\"}";
-            } else if (queryOperator === "$lt" || "$lte" || "$gt" || "$gte") {
+              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\" : " + filterValue + "}";
+            } else if (queryOperator === "$lt" || queryOperator === "$lte" || queryOperator === "$gt" || queryOperator === "$gte") {
               url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :" + parseInt(filterValue) + "}}";
+            } else if (queryOperator === "$ne" || queryOperator === '$regex') {
+              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" : " + filterValue + "}}";
             } else {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :\"" + filterValue + "\"}}";
+              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" : " + filterValue + "}}";
             }
 
             _context3.next = 5;
@@ -1176,7 +1175,7 @@ function ContentStackFetcher(_ref2) {
   }).map(function (item) {
     if (typeof item[1] === "number" && typeof item[1] !== "object") {
       operators = queryOperators;
-    } else if (typeof item[1] !== "number" && typeof item[1] !== "object") {
+    } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === 'string') {
       operators = [{
         value: "",
         label: "Is"
