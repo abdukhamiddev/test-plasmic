@@ -1078,12 +1078,12 @@ function ContentStackFetcher(_ref2) {
       entriesData = _usePlasmicQueryData.data;
 
   var _usePlasmicQueryData2 = usePlasmicQueryData(contentType && filterField && filterValue ? cacheKey + "/" + contentType + "/filtered" : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee3() {
-    var url, resp;
+    var matched, url, resp;
     return runtime_1.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            if (!(!contentType && !filterField && !filterValue)) {
+            if (!(!contentType && !filterField && !filterValue && !entriesData && !contentTypes)) {
               _context3.next = 2;
               break;
             }
@@ -1091,17 +1091,48 @@ function ContentStackFetcher(_ref2) {
             return _context3.abrupt("return", null);
 
           case 2:
+            matched = Object.values(entriesData).flatMap(function (model) {
+              return Array.isArray(model) ? model : [model];
+            }).map(function (item) {
+              var fields = Object.entries(item).find(function (el) {
+                return el[0] === filterField;
+              });
+              return fields;
+            });
+
             if (!queryOperator) {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\" : " + filterValue + "}";
-            } else if (queryOperator === "$lt" || queryOperator === "$lte" || queryOperator === "$gt" || queryOperator === "$gte") {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :" + parseInt(filterValue) + "}}";
-            } else if (queryOperator === "$ne" || queryOperator === '$regex') {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" : " + filterValue + "}}";
+              Object.values(matched).map(function (model) {
+                return Array.isArray(model) ? model : [model];
+              }).map(function (item) {
+                if (typeof item[1] === "number" && typeof item[1] !== "object") {
+                  url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\" : " + filterValue + "}";
+                } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
+                  var _JSON$stringify;
+
+                  url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query=" + JSON.stringify((_JSON$stringify = {}, _JSON$stringify[filterField] = filterValue, _JSON$stringify));
+                } else {
+                  url = "";
+                }
+              });
+            } else if (queryOperator === "$ne" || queryOperator === "$regex") {
+              Object.values(matched).map(function (model) {
+                return Array.isArray(model) ? model : [model];
+              }).map(function (item) {
+                if (typeof item[1] === "number" && typeof item[1] !== "object") {
+                  url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\":" + filterValue + "}}";
+                } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
+                  var _filterField, _JSON$stringify2;
+
+                  url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query=" + JSON.stringify((_JSON$stringify2 = {}, _JSON$stringify2[filterField] = (_filterField = {}, _filterField[queryOperator] = filterValue, _filterField), _JSON$stringify2));
+                } else {
+                  url = "";
+                }
+              });
             } else {
-              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" : " + filterValue + "}}";
+              url = "https://cdn.contentstack.io/v3/content_types/" + contentType + "/entries?environment=" + creds.environment + "&query={\"" + filterField + "\":{\"" + queryOperator + "\" :" + filterValue + "}}";
             }
 
-            _context3.next = 5;
+            _context3.next = 6;
             return fetch(url, {
               headers: {
                 api_key: creds.apiKey,
@@ -1109,15 +1140,15 @@ function ContentStackFetcher(_ref2) {
               }
             });
 
-          case 5:
+          case 6:
             resp = _context3.sent;
-            _context3.next = 8;
+            _context3.next = 9;
             return resp.json();
 
-          case 8:
+          case 9:
             return _context3.abrupt("return", _context3.sent);
 
-          case 9:
+          case 10:
           case "end":
             return _context3.stop();
         }
@@ -1168,7 +1199,7 @@ function ContentStackFetcher(_ref2) {
   }).map(function (item) {
     if (typeof item[1] === "number" && typeof item[1] !== "object") {
       operators = queryOperators;
-    } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === 'string') {
+    } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
       operators = [{
         value: "",
         label: "Is"
