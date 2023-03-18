@@ -811,15 +811,6 @@ try {
 });
 
 var searchParameters = [{
-  value: "[match]",
-  label: 'Full text search  '
-}, {
-  value: "[in]",
-  label: 'Includes'
-}, {
-  value: "[nin]",
-  label: 'Excludes'
-}, {
   value: "[lt]",
   label: 'Less than'
 }, {
@@ -827,7 +818,7 @@ var searchParameters = [{
   label: 'Less than or equal'
 }, {
   value: "[gt]",
-  label: 'Greater Than'
+  label: 'Greater than'
 }, {
   value: "[gte]",
   label: 'Greater than or equal '
@@ -954,12 +945,9 @@ var ContentfulFetcherMeta = {
       displayName: "Search Parameter",
       description: "Search Parameter to filter by.Read more (https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/)",
       options: function options(props, ctx) {
-        return searchParameters.map(function (item) {
-          return {
-            label: item == null ? void 0 : item.label,
-            value: item == null ? void 0 : item.value
-          };
-        });
+        var _ctx$queryOptions;
+
+        return (_ctx$queryOptions = ctx == null ? void 0 : ctx.queryOptions) != null ? _ctx$queryOptions : [];
       },
       hidden: function hidden(props, ctx) {
         return !props.filterField;
@@ -993,7 +981,7 @@ var ContentfulFetcherMeta = {
   }
 };
 function ContentfulFetcher(_ref2) {
-  var _contentTypes$items;
+  var _contentTypes$items, _operators, _contentTypes$items2;
 
   var filterField = _ref2.filterField,
       filterValue = _ref2.filterValue,
@@ -1036,6 +1024,10 @@ function ContentfulFetcher(_ref2) {
     }, _callee);
   }))),
       contentTypes = _usePlasmicQueryData.data;
+
+  setControlContextData == null ? void 0 : setControlContextData({
+    types: (_contentTypes$items = contentTypes == null ? void 0 : contentTypes.items) != null ? _contentTypes$items : []
+  });
 
   var _usePlasmicQueryData2 = query.usePlasmicQueryData(contentType ? cacheKey + "/" + contentType + "/entriesData" : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee2() {
     var url, query, resp;
@@ -1090,25 +1082,51 @@ function ContentfulFetcher(_ref2) {
   }))),
       filteredData = _usePlasmicQueryData3.data;
 
-  var filterFields = entriesData == null ? void 0 : entriesData.items.flatMap(function (item) {
-    var fields = Object.keys(item.fields).filter(function (field) {
-      var value = get(item, field);
-      return typeof value !== "object" && field !== "photos";
-    });
-    return fields;
-  });
-  setControlContextData == null ? void 0 : setControlContextData({
-    types: (_contentTypes$items = contentTypes == null ? void 0 : contentTypes.items) != null ? _contentTypes$items : [],
-    fields: uniq(filterFields != null ? filterFields : [])
-  });
-
   if (!creds.space || !creds.accessToken) {
     return React__default.createElement("div", null, "Please specify a valid API Credentials: Space, Access Token and Environment");
+  }
+
+  if (!contentTypes) {
+    return React__default.createElement("div", null, "Please configure the ContentStack credentials");
   }
 
   if (!entriesData) {
     return React__default.createElement("div", null, "Please select a content type");
   }
+
+  var filterFields = entriesData == null ? void 0 : entriesData.items.flatMap(function (item) {
+    var fields = Object.keys(item.fields).filter(function (field) {
+      var value = get(item, field);
+      return typeof value !== "object" && field !== "photos" && !value.match(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(?:\.\d+)?Z?/gm);
+    });
+    return fields;
+  });
+  var operators;
+  var matchedFields = Object.values(entriesData.items).map(function (item) {
+    var fields = Object.entries(item.fields).find(function (el) {
+      return el[0] === filterField;
+    });
+    return fields;
+  });
+  Object.values(matchedFields).map(function (model) {
+    return Array.isArray(model) ? model : [model];
+  }).map(function (item) {
+    if (typeof item[1] === "number" && typeof item[1] !== "object") {
+      operators = searchParameters;
+    } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
+      operators = [{
+        value: "[match]",
+        label: "Full text search"
+      }];
+    }
+  });
+  console.log(entriesData, "entries");
+  console.log(matchedFields, 'matchedFields');
+  setControlContextData == null ? void 0 : setControlContextData({
+    queryOptions: (_operators = operators) != null ? _operators : [],
+    types: (_contentTypes$items2 = contentTypes == null ? void 0 : contentTypes.items) != null ? _contentTypes$items2 : [],
+    fields: uniq(filterFields != null ? filterFields : [])
+  });
 
   if (filterField && !searchParameter) {
     return React__default.createElement("div", null, "Please specify a Search Parameter");

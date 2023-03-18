@@ -804,7 +804,7 @@ try {
 }
 });
 
-var searchParameters = [{
+var filterParameters = [{
   value: '==',
   label: 'Equality'
 }, {
@@ -1006,7 +1006,7 @@ var sanityFetcherMeta = {
   }
 };
 function SanityFetcher(_ref2) {
-  var _allDataTypes$data, _data$data;
+  var _allDataTypes$data;
 
   var groq = _ref2.groq,
       docType = _ref2.docType,
@@ -1087,7 +1087,8 @@ function SanityFetcher(_ref2) {
     creds: creds
   });
   var sanity = makeSanityClient(creds);
-  var data = usePlasmicQueryData(cacheKey, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee2() {
+
+  var _usePlasmicQueryData = usePlasmicQueryData(docType && groq ? cacheKey : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee2() {
     var query, resp;
     return runtime_1.wrap(function _callee2$(_context2) {
       while (1) {
@@ -1101,9 +1102,7 @@ function SanityFetcher(_ref2) {
             return _context2.abrupt("return", null);
 
           case 2:
-            if (docType && filterField && filterValue && filterParameter) {
-              query = groq + " && " + filterField + " " + filterParameter + " " + filterValue + "]";
-            } else if (limit) {
+            if (limit) {
               query = groq + "][" + limit + "]";
             } else {
               query = groq + "]";
@@ -1122,7 +1121,65 @@ function SanityFetcher(_ref2) {
         }
       }
     }, _callee2);
-  })));
+  }))),
+      response = _usePlasmicQueryData.data;
+
+  var _usePlasmicQueryData2 = usePlasmicQueryData(groq && filterField && filterValue && filterParameter && response ? cacheKey + "/filtered" : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee3() {
+    var query, matched, resp;
+    return runtime_1.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            if (!(!docType && !filterField && !filterValue && !filterParameter && !response)) {
+              _context3.next = 2;
+              break;
+            }
+
+            return _context3.abrupt("return", null);
+
+          case 2:
+            if (response) {
+              _context3.next = 4;
+              break;
+            }
+
+            return _context3.abrupt("return", null);
+
+          case 4:
+            matched = Object.values(response).flatMap(function (model) {
+              return Array.isArray(model) ? model : [model];
+            }).map(function (item) {
+              var fields = Object.entries(item).find(function (el) {
+                return el[0] === filterField;
+              });
+              return fields;
+            });
+            Object.values(matched).map(function (model) {
+              return Array.isArray(model) ? model : [model];
+            }).map(function (item) {
+              if (typeof item[1] === "number" && typeof item[1] !== "object") {
+                query = groq + " && " + filterField + " " + filterParameter + " " + filterValue + "]";
+              } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
+                query = groq + " && " + filterField + " " + filterParameter + " \"" + filterValue + "\"]";
+              } else {
+                query = groq + " && " + filterField + " " + filterParameter + " " + filterValue + "]";
+              }
+            });
+            _context3.next = 8;
+            return sanity.fetch(query);
+
+          case 8:
+            resp = _context3.sent;
+            return _context3.abrupt("return", resp);
+
+          case 10:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }))),
+      filteredData = _usePlasmicQueryData2.data;
 
   if (!docTypes) {
     return React.createElement("div", null, "Please configure the Sanity provider with a valid projectId, dataset, and token (if necessary). Don't forget to add 'https://host.plasmicdev.com' as an authorized host on the CORS origins section of your project.");
@@ -1132,20 +1189,22 @@ function SanityFetcher(_ref2) {
     docTypes: docTypes
   });
 
-  if (!(data != null && data.data)) {
+  if (!response) {
     return React.createElement("div", null, "Please specify a valid GROQ query or select a Document type.");
-  }
+  } // console.log(data?.data, "Response");
 
-  console.log(data == null ? void 0 : data.data, "Response");
-  var sanityFields = (_data$data = data.data) == null ? void 0 : _data$data.map(function (item) {
+
+  var sanityFields = response.map(function (item) {
     var fields = Object.keys(item).filter(function (field) {
       var value = get(item, field);
-      return typeof value !== "object" || value._type !== "image";
+      console.log(value, "value");
+      return typeof value !== "object" && value._type !== "image" && typeof value === 'number' || typeof value === 'string' && !value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
     });
+    console.log(fields, 'fields');
     return fields;
   });
   var operators;
-  var matchedFields = Object.values(data == null ? void 0 : data.data).flatMap(function (model) {
+  var matchedFields = Object.values(response).flatMap(function (model) {
     return Array.isArray(model) ? model : [model];
   }).map(function (item) {
     var fields = Object.entries(item).find(function (el) {
@@ -1157,7 +1216,7 @@ function SanityFetcher(_ref2) {
     return Array.isArray(model) ? model : [model];
   }).map(function (item) {
     if (typeof item[1] === "number" && typeof item[1] !== "object") {
-      operators = searchParameters;
+      operators = filterParameters;
     } else if (typeof item[1] !== "number" && typeof item[1] !== "object" && typeof item[1] === "string") {
       operators = [{
         value: "==",
@@ -1193,12 +1252,12 @@ function SanityFetcher(_ref2) {
   var repElements;
   var imageBuilder = imageUrlBuilder(sanity);
 
-  if (filterParameter && filterField && filterValue) {
-    if (data.data.length === 0) {
+  if (filteredData) {
+    if (filteredData.length === 0) {
       return React.createElement("div", null, "No published types found");
     }
 
-    repElements = data == null ? void 0 : data.data.map(function (item, index) {
+    repElements = filteredData.map(function (item, index) {
       Object.keys(item).forEach(function (field) {
         if (item[field]._type === "image") {
           item[field].imgUrl = imageBuilder.image(item[field]).ignoreImageParams().toString();
@@ -1215,7 +1274,7 @@ function SanityFetcher(_ref2) {
       }, repeatedElement(index, children)));
     });
   } else {
-    repElements = noAutoRepeat ? children : data == null ? void 0 : data.data.map(function (item, index) {
+    repElements = noAutoRepeat ? children : response.map(function (item, index) {
       Object.keys(item).forEach(function (field) {
         if (item[field]._type === "image") {
           item[field].imgUrl = imageBuilder.image(item[field]).ignoreImageParams().toString();
@@ -1239,7 +1298,7 @@ function SanityFetcher(_ref2) {
 
   return React.createElement(DataProvider, {
     name: "sanityItems",
-    data: data.data
+    data: response
   }, noLayout ? React.createElement(React.Fragment, null, " ", repElements, " ") : React.createElement("div", {
     className: className
   }, " ", repElements, " "));
@@ -1268,11 +1327,11 @@ var sanityFieldMeta = {
     }
   }
 };
-function SanityField(_ref5) {
-  var className = _ref5.className,
-      path = _ref5.path,
-      field = _ref5.field,
-      setControlContextData = _ref5.setControlContextData;
+function SanityField(_ref6) {
+  var className = _ref6.className,
+      path = _ref6.path,
+      field = _ref6.field,
+      setControlContextData = _ref6.setControlContextData;
   var item = useSelector("sanityItem");
 
   if (!item) {

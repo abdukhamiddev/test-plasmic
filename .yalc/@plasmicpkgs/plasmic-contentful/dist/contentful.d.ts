@@ -16,7 +16,7 @@ interface ContentfulFetcherProps {
     order?: string;
     filterField?: string;
     searchParameter?: string;
-    filterValue?: string;
+    filterValue?: string | number;
     noAutoRepeat?: boolean;
     noLayout?: boolean;
     setControlContextData?: (data: {
@@ -25,6 +25,7 @@ interface ContentfulFetcherProps {
             id: string;
         }[];
         fields?: string[];
+        queryOptions?: [];
     }) => void;
 }
 export declare const ContentfulFetcherMeta: ComponentMeta<ContentfulFetcherProps>;
