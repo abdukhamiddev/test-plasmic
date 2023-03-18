@@ -1090,7 +1090,7 @@ function ContentfulFetcher(_ref2) {
   var filterFields = entriesData == null ? void 0 : entriesData.items.flatMap(function (item) {
     var fields = Object.keys(item.fields).filter(function (field) {
       var value = get(item, field);
-      return typeof value !== "object" && field !== "photos" && !value.match(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(?:\.\d+)?Z?/gm);
+      return typeof value !== "object" && field !== "photos";
     });
     return fields;
   });
@@ -1113,8 +1113,6 @@ function ContentfulFetcher(_ref2) {
       }];
     }
   });
-  console.log(entriesData, "entries");
-  console.log(matchedFields, 'matchedFields');
   setControlContextData == null ? void 0 : setControlContextData({
     queryOptions: (_operators = operators) != null ? _operators : [],
     types: (_contentTypes$items2 = contentTypes == null ? void 0 : contentTypes.items) != null ? _contentTypes$items2 : [],
