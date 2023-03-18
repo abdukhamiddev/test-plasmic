@@ -831,9 +831,6 @@ var queryOperators = [{
   value: "$ne",
   label: 'Is not'
 }, {
-  value: "$regex",
-  label: 'Matches regex'
-}, {
   value: "$lt",
   label: 'Less than'
 }, {
@@ -1084,7 +1081,7 @@ function ContentStackFetcher(_ref2) {
   }))),
       entriesData = _usePlasmicQueryData.data;
 
-  var _usePlasmicQueryData2 = query.usePlasmicQueryData(contentType && filterField && filterValue ? cacheKey + "/" + contentType + "/filtered" : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee3() {
+  var _usePlasmicQueryData2 = query.usePlasmicQueryData(contentType && filterField && filterValue && entriesData ? cacheKey + "/" + contentType + "/filtered" : null, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee3() {
     var matched, url, resp;
     return runtime_1.wrap(function _callee3$(_context3) {
       while (1) {
@@ -1188,7 +1185,7 @@ function ContentStackFetcher(_ref2) {
   }).map(function (item) {
     var fields = Object.keys(item).filter(function (field) {
       var value = get(item, field);
-      return typeof value !== "object" && field !== "images";
+      return typeof value !== "object" && field !== "images" && typeof value === 'number' || typeof value === 'string' && !value.match(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(?:\.\d+)?Z?/gm) && !value.match(/^blt.*/);
     });
     return fields;
   });
