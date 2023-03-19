@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@plasmicapp/loader-nextjs": "^1.0.233",
+    "@plasmicapp/host": "^1.0.115",
+    "@plasmicapp/loader-nextjs": "^1.0.245",
     "@plasmicpkgs/keen-slider": "file:.yalc/@plasmicpkgs/keen-slider",
     "@plasmicpkgs/plasmic-audio": "file:.yalc/@plasmicpkgs/plasmic-audio",
     "@plasmicpkgs/plasmic-calendly": "file:.yalc/@plasmicpkgs/plasmic-calendly",

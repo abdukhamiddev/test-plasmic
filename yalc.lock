@@ -2,11 +2,11 @@
   "version": "v1",
   "packages": {
     "@plasmicpkgs/plasmic-content-stack": {
-      "signature": "184fcfa6329cd4f07ab2ab4f0354e44a",
+      "signature": "b5934dd3f6732099ef0b2fa19bb1fc29",
       "file": true
     },
     "@plasmicpkgs/plasmic-contentful": {
-      "signature": "d4dfd7337b5b5e4469c5054df0d1b864",
+      "signature": "620f9bec64ae112f8eb17ec8f31340cc",
       "file": true
     },
     "@plasmicpkgs/plasmic-graphcms": {
@@ -38,7 +38,7 @@
       "file": true
     },
     "@plasmicpkgs/plasmic-sanity-io": {
-      "signature": "39e4578b3e00790010e43236288993c5",
+      "signature": "bd6c3df1139e25703f5855cd421f40cf",
       "file": true
     },
     "@plasmicpkgs/plasmic-pigeon-maps": {

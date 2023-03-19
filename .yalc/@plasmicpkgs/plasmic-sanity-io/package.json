@@ -1,6 +1,6 @@
 {
   "name": "@plasmicpkgs/plasmic-sanity-io",
-  "version": "1.0.87",
+  "version": "1.0.88",
   "description": "Plasmic Sanity.io components.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,5 +36,5 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "yalcSig": "39e4578b3e00790010e43236288993c5"
+  "yalcSig": "bd6c3df1139e25703f5855cd421f40cf"
 }

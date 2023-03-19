@@ -1191,16 +1191,13 @@ function SanityFetcher(_ref2) {
 
   if (!response) {
     return React.createElement("div", null, "Please specify a valid GROQ query or select a Document type.");
-  } // console.log(data?.data, "Response");
-
+  }
 
   var sanityFields = response.map(function (item) {
     var fields = Object.keys(item).filter(function (field) {
       var value = get(item, field);
-      console.log(value, "value");
-      return typeof value !== "object" && value._type !== "image" && typeof value === 'number' || typeof value === 'string' && !value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
+      return typeof value !== "object" && value._type !== "image" && typeof value === "number" || typeof value === "string" && !value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
     });
-    console.log(fields, 'fields');
     return fields;
   });
   var operators;
